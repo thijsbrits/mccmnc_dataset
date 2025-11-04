@@ -8,11 +8,19 @@ def get_mccmnc_dataset():
 
     mccmnc = pd.read_html(url, converters={i: str for i in range(n_columns)})[0]
     mccmnc.columns = mccmnc.columns.map(lambda x: x.lower().replace(" ", "_"))
+    mccmnc.fillna("", inplace=True)
 
     return mccmnc
+
+def test_read_json():
+    with open("mccmnc_dataset.json", "r") as f:
+        mccmnc = json.load(f)
+    print(mccmnc)
 
 if __name__ == "__main__":
     mccmnc = get_mccmnc_dataset()
     print(mccmnc.head())
     with open("mccmnc_dataset.json", "w") as f:
         json.dump(mccmnc.to_dict(orient="records"), f)
+
+    test_read_json()
